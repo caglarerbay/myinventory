@@ -29,8 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'DESKTOP-6L81PLG',
     '10.0.2.2',
-    'ec2-16-171-15-250.eu-north-1.compute.amazonaws.com',
-    'StokTakipBackend-env.eba-v6im9dmf.eu-north-1.elasticbeanstalk.com',
+    'nukstoktakip.eu-north-1.elasticbeanstalk.com',
 ]
 
 # Uygulama tanımlamaları
