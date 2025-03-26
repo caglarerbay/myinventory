@@ -23,7 +23,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ALLOWED_HOSTS ayarını, AWS instance'ınızın public DNS'i ekledim.
+# ALLOWED_HOSTS ayarı; EB ortamınızın domainini de ekleyin.
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
@@ -47,9 +47,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise, statik dosyaların üretim ortamında sunulmasını sağlar.
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'myinventory.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # Proje içerisinde özel template klasörleriniz varsa ekleyin.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,8 +110,11 @@ TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 USE_TZ = True
 
-# Statik dosyalar ayarı (CSS, JavaScript, resimler)
-STATIC_URL = 'static/'
+# Statik dosyalar ayarı
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# WhiteNoise tarafından statik dosya sıkıştırması ve cache ayarları eklenebilir
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Varsayılan otomatik alan tipi
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
