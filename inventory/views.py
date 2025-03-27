@@ -74,30 +74,21 @@ def register_user(request):
     Body: {
       "username": "...",
       "email": "...",
-      "access_code": "...",
       "password": "...",
       "password2": "..." (opsiyonel)
     }
+    Daily code kontrolü kaldırıldı.
     """
     username = request.data.get('username')
     email = request.data.get('email')
-    access_code = request.data.get('access_code')
     password = request.data.get('password')
     password2 = request.data.get('password2')  # opsiyonel
 
-    if not username or not email or not access_code or not password:
+    if not username or not email or not password:
         return Response({"detail": "Tüm alanlar zorunludur."}, status=400)
 
     if password2 and password != password2:
         return Response({"detail": "Parolalar eşleşmiyor."}, status=400)
-
-    today = timezone.now().date()
-    try:
-        daily_code = DailyAccessCode.objects.get(date=today)
-        if daily_code.code != access_code:
-            return Response({"detail": "Geçersiz erişim kodu."}, status=400)
-    except DailyAccessCode.DoesNotExist:
-        return Response({"detail": "Bugün için erişim kodu belirlenmedi."}, status=400)
 
     if User.objects.filter(username=username).exists():
         return Response({"detail": "Bu kullanıcı adı zaten mevcut."}, status=400)
@@ -118,29 +109,20 @@ def forgot_password_user(request):
     POST /api/forgot_password/
     Body: {
       "username": "...",
-      "access_code": "...",
       "new_password": "...",
       "new_password2": "..."
     }
+    Daily code kontrolü kaldırıldı.
     """
     username = request.data.get('username')
-    access_code = request.data.get('access_code')
     new_password = request.data.get('new_password')
     new_password2 = request.data.get('new_password2')
 
-    if not username or not access_code or not new_password or not new_password2:
+    if not username or not new_password or not new_password2:
         return Response({"detail": "Tüm alanlar zorunludur."}, status=400)
 
     if new_password != new_password2:
         return Response({"detail": "Yeni şifreler eşleşmiyor."}, status=400)
-
-    today = timezone.now().date()
-    try:
-        daily_code = DailyAccessCode.objects.get(date=today)
-        if daily_code.code != access_code:
-            return Response({"detail": "Geçersiz erişim kodu."}, status=400)
-    except DailyAccessCode.DoesNotExist:
-        return Response({"detail": "Bugün için erişim kodu belirlenmedi."}, status=400)
 
     try:
         user = User.objects.get(username=username)
