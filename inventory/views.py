@@ -77,7 +77,6 @@ def register_user(request):
       "password": "...",
       "password2": "..." (opsiyonel)
     }
-    Daily code kontrolü kaldırıldı.
     """
     username = request.data.get('username')
     email = request.data.get('email')
@@ -89,6 +88,8 @@ def register_user(request):
 
     if password2 and password != password2:
         return Response({"detail": "Parolalar eşleşmiyor."}, status=400)
+
+    # Artık daily access kod kontrolü yapılmayacak
 
     if User.objects.filter(username=username).exists():
         return Response({"detail": "Bu kullanıcı adı zaten mevcut."}, status=400)
@@ -112,7 +113,6 @@ def forgot_password_user(request):
       "new_password": "...",
       "new_password2": "..."
     }
-    Daily code kontrolü kaldırıldı.
     """
     username = request.data.get('username')
     new_password = request.data.get('new_password')
@@ -123,6 +123,8 @@ def forgot_password_user(request):
 
     if new_password != new_password2:
         return Response({"detail": "Yeni şifreler eşleşmiyor."}, status=400)
+
+    # Günlük erişim kodu kontrolü kaldırıldı
 
     try:
         user = User.objects.get(username=username)
